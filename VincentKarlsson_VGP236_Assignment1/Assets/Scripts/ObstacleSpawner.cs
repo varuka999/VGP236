@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ObstacleSpawner : MonoBehaviour
 {
-    [SerializeField] private Transform _spawnPoint1 = null;
+    [SerializeField] private Transform _spawnPoint = null;
     [SerializeField] private GameObject _obstaclePrefab = null;
     [SerializeField] private float _timerBase = 2.5f;
     private float _timerCap = 0.0f;
@@ -29,8 +29,8 @@ public class ObstacleSpawner : MonoBehaviour
         }
         else
         {
-            GameObject obstacle = Instantiate(_obstaclePrefab, _spawnPoint1);
-            obstacle.transform.position = _spawnPoint1.position;
+            GameObject obstacle = Instantiate(_obstaclePrefab, _spawnPoint);
+            obstacle.transform.position = _spawnPoint.position;
             obstacle.GetComponent<MovingObstacle>().Initialize(_minObstacleXScale, _maxObstacleYScale, _minObstacleYScale, _maxObstacleXScale, _minObstacleRotate, _maxObstacleRotate, _obstacleMoveSpeed);
 
             RandomizeTimer();

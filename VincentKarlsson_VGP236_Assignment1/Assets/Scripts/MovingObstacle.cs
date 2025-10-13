@@ -26,19 +26,19 @@ public class MovingObstacle : MonoBehaviour
             _obstacleRotationSpeed = Random.Range(minRotate, maxRotate);
 
             Vector3 newScale = new Vector3(obstacleXScale, obstacleYScale, 0.0f);
-            gameObject.transform.localScale = newScale;
+            this.gameObject.transform.localScale = newScale;
             _obstacleRigidBody2D.mass = obstacleMass;
         }
     }
 
     private void Move()
     {
-        Vector3 position = transform.position;
+        Vector3 position = this.transform.position;
         position.x -= _obstacleMoveSpeed * Time.deltaTime;
 
         Vector3 rotation = new Vector3(0, 0, _obstacleRotationSpeed);
 
-        transform.position = position;
-        transform.Rotate(rotation * Time.deltaTime);
+        this.transform.position = position;
+        this.transform.Rotate(rotation * Time.deltaTime);
     }
 }

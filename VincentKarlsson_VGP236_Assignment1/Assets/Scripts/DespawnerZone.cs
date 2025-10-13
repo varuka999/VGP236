@@ -6,7 +6,6 @@ public class DespawnerZone : MonoBehaviour
     {
         if (collision != null)
         {
-            Debug.Log("Ball destroyed!");
             Destroy(collision.gameObject);
         }
     }

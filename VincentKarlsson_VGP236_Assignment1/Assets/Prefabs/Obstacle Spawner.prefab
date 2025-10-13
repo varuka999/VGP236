@@ -76,7 +76,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e979ced48de728c4f9e94afba8fd7628, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObstacleSpawnerManager
-  _spawnPoint1: {fileID: 7230862142532077785}
+  _spawnPoint: {fileID: 7230862142532077785}
   _obstaclePrefab: {fileID: 7416861221479465079, guid: 43c0c823839faac459376b9eb90bf08d, type: 3}
   _timerBase: 2.5
   _minObstacleXScale: 0.2
