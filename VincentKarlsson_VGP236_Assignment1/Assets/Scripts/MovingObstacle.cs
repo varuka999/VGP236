@@ -37,4 +37,20 @@ public class MovingObstacle : MonoBehaviour
         this.transform.position = position;
         this.transform.Rotate(rotation * Time.deltaTime);
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision != null && collision.tag == "Destroy Zone")
+        {
+            DestroySelf();
+        }
+    }
+
+    public void DestroySelf()
+    {
+        if (this.gameObject != null && this.gameObject.activeSelf == true)
+        {
+            Destroy(this.gameObject);
+        }
+    }
 }

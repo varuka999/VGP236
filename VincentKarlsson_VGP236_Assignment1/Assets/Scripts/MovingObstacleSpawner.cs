@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ObstacleSpawner : MonoBehaviour
+public class MovingObstacleSpawner : MonoBehaviour
 {
     [SerializeField] private Transform _spawnPoint = null;
     [SerializeField] private GameObject _obstaclePrefab = null;

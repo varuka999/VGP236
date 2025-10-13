@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 3
   tags:
   - Gravity Shift
+  - Ball
+  - Moving Obstacle
+  - Destroy Zone
   layers:
   - Default
   - TransparentFX
