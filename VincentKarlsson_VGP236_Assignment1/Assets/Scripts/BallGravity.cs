@@ -15,7 +15,6 @@ public class BallGravity : MonoBehaviour
         }
 
         _ballRigidBody2D.gravityScale = _baseGravityScale;
-        //_timer = _ballRigidBody2D.gravityScale;
     }
 
     private void Update()

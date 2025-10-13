@@ -8,6 +8,7 @@ public class ObstacleSpawner : MonoBehaviour
     private float _timerCap = 0.0f;
     private float _timer = 0.0f;
 
+    [Header("Obstacle Properties")]
     [SerializeField] private float _minObstacleXScale = 0.0f;
     [SerializeField] private float _maxObstacleXScale = 0.0f;
     [SerializeField] private float _minObstacleYScale = 0.0f;

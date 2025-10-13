@@ -7,7 +7,7 @@ public class SpawnerMovement : MonoBehaviour
 
     private void Update()
     {
-        OrbitMove();
+        //OrbitMove();
         Move();
     }
 

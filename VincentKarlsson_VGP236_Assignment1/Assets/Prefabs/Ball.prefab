@@ -108,6 +108,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BallGravity
   _ballRigidBody2D: {fileID: 2637155941778480811}
   _baseGravityScale: 0.2
+  _gravityRate: 0.1
 --- !u!50 &2637155941778480811
 Rigidbody2D:
   serializedVersion: 5

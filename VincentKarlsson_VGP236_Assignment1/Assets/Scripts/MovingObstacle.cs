@@ -3,10 +3,6 @@ using UnityEngine;
 public class MovingObstacle : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D _obstacleRigidBody2D = null;
-
-    //private float _obstacleXScale = 0.0f;
-    //private float _obstacleYScale = 0.0f;
-    //private float _obstacleMass = 0.0f;
     private float _obstacleMoveSpeed = 0.9f;
     private float _obstacleRotationSpeed = 0.0f;
 
