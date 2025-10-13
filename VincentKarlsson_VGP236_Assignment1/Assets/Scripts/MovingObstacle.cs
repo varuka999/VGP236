@@ -4,37 +4,41 @@ public class MovingObstacle : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D _obstacleRigidBody2D = null;
 
-    private float _obstacleXScale = 0.0f;
-    private float _obstacleYScale = 0.0f;
-    private float _obstacleMass = 0.0f;
-    [SerializeField] private float _obstacleMoveSpeed = 0.0f;
+    //private float _obstacleXScale = 0.0f;
+    //private float _obstacleYScale = 0.0f;
+    //private float _obstacleMass = 0.0f;
+    private float _obstacleMoveSpeed = 0.9f;
     private float _obstacleRotationSpeed = 0.0f;
 
     private void Update()
     {
-        Vector3 position = transform.position;
-        position.x -= _obstacleMoveSpeed * Time.deltaTime;
-
-        transform.position = position;
+        Move();
     }
 
-    public void Initialize()
+    public void Initialize(float minX, float maxX, float minY, float maxY, float minRotate, float maxRotate, float moveSpeed)
     {
         if (_obstacleRigidBody2D != null)
         {
-            _obstacleXScale = Random.Range(0.3f, 0.5f);
-            _obstacleYScale = Random.Range(0.3f, 0.6f);
-            _obstacleMass = (_obstacleXScale * _obstacleYScale) * 100;
-            _obstacleMoveSpeed = 3;
-            _obstacleRotationSpeed = 0;
+            float obstacleXScale = Random.Range(minX, maxX);
+            float obstacleYScale = Random.Range(minY, maxY);
+            float obstacleMass = (obstacleXScale * obstacleYScale) * 100;
+            _obstacleMoveSpeed = moveSpeed;
+            _obstacleRotationSpeed = Random.Range(minRotate, maxRotate);
+
+            Vector3 newScale = new Vector3(obstacleXScale, obstacleYScale, 0.0f);
+            gameObject.transform.localScale = newScale;
+            _obstacleRigidBody2D.mass = obstacleMass;
         }
-        //else
-        //{
-        //    _obstacleXScale = 0.4f;
-        //    _obstacleYScale = 0.5f;
-        //    _obstacleMass = (_obstacleXScale * _obstacleYScale) * 100;
-        //    _obstacleMoveSpeed = 0.5f;
-        //    _obstacleRotationSpeed = 0.5f;
-        //}
+    }
+
+    private void Move()
+    {
+        Vector3 position = transform.position;
+        position.x -= _obstacleMoveSpeed * Time.deltaTime;
+
+        Vector3 rotation = new Vector3(0, 0, _obstacleRotationSpeed);
+
+        transform.position = position;
+        transform.Rotate(rotation * Time.deltaTime);
     }
 }
