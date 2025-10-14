@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CollectableCollision : MonoBehaviour
+public class CollectableBehaviour : MonoBehaviour
 {
     [SerializeField] protected int _scoreReward = 0;
     protected bool _isCollected = false;
@@ -15,7 +15,7 @@ public class CollectableCollision : MonoBehaviour
         if (collision != null && collision.tag == "Ball" && _isCollected == false)
         {
             _isCollected = true;
-            ScoreManager.Instance.UpdateScore(_scoreReward);
+            UIManager.Instance.UpdateScore(_scoreReward);
             Destroy(collision.gameObject);
             this.gameObject.SetActive(false);
         }

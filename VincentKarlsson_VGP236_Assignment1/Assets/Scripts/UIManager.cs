@@ -1,9 +1,10 @@
 using TMPro;
 using UnityEngine;
 
-public class ScoreManager : MonoBehaviour
+public class UIManager : MonoBehaviour
 {
-    private static ScoreManager _instance = null;
+    private static UIManager _instance = null;
+    [SerializeField] private TMP_Text _ammoText = null;
     [SerializeField] private TMP_Text _scoreText = null;
     [SerializeField] private TMP_Text _counterText1 = null;
     [SerializeField] private TMP_Text _counterText3 = null;
@@ -13,7 +14,7 @@ public class ScoreManager : MonoBehaviour
     private int _counter3 = 0;
     private int _counter10 = 0;
 
-    public static ScoreManager Instance { get { return _instance; } }
+    public static UIManager Instance { get { return _instance; } }
 
     private void Awake()
     {
@@ -49,6 +50,11 @@ public class ScoreManager : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    public void UpdateAmmoText(int ammo)
+    {
+        _ammoText.text = "Ammo: " + ammo.ToString();
     }
 
     private void UpdateScoreText()

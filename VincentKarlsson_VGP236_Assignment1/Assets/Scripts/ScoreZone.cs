@@ -9,7 +9,7 @@ public class ScoreZone : MonoBehaviour
         if (collision != null)
         {
             //Debug.Log("Ball scored!");
-            ScoreManager.Instance.UpdateScore(_pointReward);
+            UIManager.Instance.UpdateScore(_pointReward);
             Destroy(collision.gameObject);
         }
     }

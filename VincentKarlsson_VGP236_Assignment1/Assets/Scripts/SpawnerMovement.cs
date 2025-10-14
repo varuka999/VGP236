@@ -3,20 +3,29 @@ using UnityEngine;
 public class SpawnerMovement : MonoBehaviour
 {
     [SerializeField] private float _movementSpeed = 2.5f;
-    [SerializeField] private float _maxDistanceFromOrigin = 0.0f; 
+    [SerializeField] private float _maxDistanceFromOrigin = 0.0f;
+    [SerializeField] private bool _isOrbitActive = true;
 
     private void Update()
     {
-        //OrbitMove();
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            _isOrbitActive = !_isOrbitActive;
+        }
+
+        OrbitMove();
         Move();
     }
 
     private void OrbitMove()
     {
-        Vector3 position = this.transform.position;
-        position.x -= 0.3f * Time.deltaTime;
+        if (_isOrbitActive)
+        {
+            Vector3 position = this.transform.position;
+            position.x -= 0.3f * Time.deltaTime;
 
-        this.transform.position = position;
+            this.transform.position = position;
+        }
     }
 
     private void Move()
@@ -38,13 +47,16 @@ public class SpawnerMovement : MonoBehaviour
             this.transform.position = position;
         }
 
-        if (this.transform.position.x < -_maxDistanceFromOrigin)
+        if (Mathf.Abs(this.transform.position.x) > _maxDistanceFromOrigin)
         {
-            this.transform.position = new Vector3(-_maxDistanceFromOrigin, this.transform.position.y, this.transform.position.z);
-        }
-        else if (this.transform.position.x > _maxDistanceFromOrigin)
-        {
-            this.transform.position = new Vector3(_maxDistanceFromOrigin, this.transform.position.y, this.transform.position.z);
+            if (this.transform.position.x < -_maxDistanceFromOrigin)
+            {
+                this.transform.position = new Vector3(-_maxDistanceFromOrigin, this.transform.position.y, this.transform.position.z);
+            }
+            else if (this.transform.position.x > _maxDistanceFromOrigin)
+            {
+                this.transform.position = new Vector3(_maxDistanceFromOrigin, this.transform.position.y, this.transform.position.z);
+            }
         }
     }
 }
