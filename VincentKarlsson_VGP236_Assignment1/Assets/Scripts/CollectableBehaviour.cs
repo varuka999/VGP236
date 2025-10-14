@@ -5,7 +5,7 @@ public class CollectableBehaviour : MonoBehaviour
     [SerializeField] protected int _scoreReward = 0;
     protected bool _isCollected = false;
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         _isCollected = false;
     }

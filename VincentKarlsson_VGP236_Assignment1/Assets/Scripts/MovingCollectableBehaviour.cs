@@ -3,10 +3,11 @@ using UnityEngine;
 public class MovingCollectableBehaviour : CollectableBehaviour
 {
     [SerializeField] private GameObject _explosionRadius = null;
-    [SerializeField] private float _moveSpeed = 4.0f;
+    [SerializeField] private float _moveSpeed = 3.5f;
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
         _moveSpeed = Mathf.Abs(_moveSpeed) * this.gameObject.transform.localScale.z;
     }
 

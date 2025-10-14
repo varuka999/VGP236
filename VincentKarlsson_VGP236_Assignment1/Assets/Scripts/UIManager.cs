@@ -14,7 +14,7 @@ public class UIManager : MonoBehaviour
     private int _counter3 = 0;
     private int _counter10 = 0;
 
-    public static UIManager Instance { get { return _instance; } }
+    public static UIManager Instance { get => _instance; }
 
     private void Awake()
     {
