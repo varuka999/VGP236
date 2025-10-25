@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     private InputAction _jumpInputAction = null;
     [SerializeField] private Rigidbody2D _rg2D = null;
     [SerializeField] private GroundCheck _groundCheck = null;
+    [SerializeField] private SlopeCheck _slopeCheck = null;
 
     [SerializeField] private float _moveSpeed = 10.0f;
     [SerializeField] private float _jumpSpeed = 30.0f;
@@ -40,6 +41,11 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 moveInput = _moveInputAction.ReadValue<Vector2>();
         _rg2D.linearVelocityX = moveInput.x * _moveSpeed;
+
+        if (moveInput.x == 0)
+        {
+            _slopeCheck.CheckIfOnSlope();
+        }
     }
 
     private void OnDisable()
