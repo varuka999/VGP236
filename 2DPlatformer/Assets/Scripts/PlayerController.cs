@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -13,11 +14,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _moveSpeed = 10.0f;
     [SerializeField] private float _jumpSpeed = 30.0f;
 
+    public float MoveSpeed { get => _moveSpeed; }
+
     private void Awake()
     {
         if (_rg2D == null)
         {
-            this.gameObject.GetComponent<Rigidbody2D>();
+            _rg2D = this.gameObject.GetComponent<Rigidbody2D>();
         }
 
         _playerInput = new PlayerInput();
@@ -52,5 +55,10 @@ public class PlayerController : MonoBehaviour
         {
             _rg2D.linearVelocityY = _jumpSpeed;
         }
+    }
+
+    public Vector2 GetMovementInput()
+    {
+        return _moveInputAction.ReadValue<Vector2>();
     }
 }
