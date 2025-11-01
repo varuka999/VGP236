@@ -1,10 +1,9 @@
-using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private PlayerAnimation _playerAnimation = null;
     private PlayerInput _playerInput = null;
     private InputAction _moveInputAction = null;
     private InputAction _jumpInputAction = null;
@@ -25,8 +24,17 @@ public class PlayerController : MonoBehaviour
         }
 
         _playerInput = new PlayerInput();
-        _moveInputAction = _playerInput.Player.Move;
-        _jumpInputAction = _playerInput.Player.Jump;
+
+        if (this.gameObject.tag == "Player1")
+        {
+            _moveInputAction = _playerInput.Player1.Move;
+            _jumpInputAction = _playerInput.Player1.Jump;
+        }
+        else if (this.gameObject.tag == "Player2")
+        {
+            _moveInputAction = _playerInput.Player2.Move;
+            _jumpInputAction = _playerInput.Player2.Jump;
+        }
 
         _jumpInputAction.performed += OnJump;
     }
@@ -37,22 +45,23 @@ public class PlayerController : MonoBehaviour
         _moveInputAction.Enable();
         _jumpInputAction.Enable();
     }
-    private void Update()
-    {
-        Vector2 moveInput = _moveInputAction.ReadValue<Vector2>();
-        _rg2D.linearVelocityX = moveInput.x * _moveSpeed;
-
-        if (moveInput.x == 0)
-        {
-            _slopeCheck.CheckIfOnSlope();
-        }
-    }
-
     private void OnDisable()
     {
         _playerInput.Disable();
         _moveInputAction.Disable();
         _jumpInputAction.Disable();
+    }
+    private void FixedUpdate()
+    {
+        Move();
+    }
+
+    private void Move()
+    {
+        Vector2 moveInput = _moveInputAction.ReadValue<Vector2>();
+        _rg2D.linearVelocityX = moveInput.x * _moveSpeed;
+
+        _playerAnimation.UpdateAnimations(moveInput.x);
     }
 
     private void OnJump(InputAction.CallbackContext context)

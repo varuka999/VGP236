@@ -8,6 +8,8 @@ public class SlopeCheck : MonoBehaviour
     [SerializeField] private PhysicsMaterial2D _noFrictionMaterial = null;
     [SerializeField] private PhysicsMaterial2D _fullFrictionMaterial = null;
 
+    private bool _isOnSlope = false;
+
     private void Awake()
     {
         if (_rg2D == null)
@@ -16,18 +18,32 @@ public class SlopeCheck : MonoBehaviour
         }
     }
 
-    public void CheckIfOnSlope()
+    public bool ReturnIfOnSlope(float moveInput)
     {
-        if (_slopeCheckRight.IsOnSlope)
+        if (_isOnSlope != _slopeCheckRight.IsOnSlope ? !_slopeCheckLeft.IsOnSlope : _slopeCheckLeft.IsOnSlope ? !_slopeCheckRight.IsOnSlope : false)
         {
-            if (_slopeCheckLeft.IsOnSlope)
-            {
-                _rg2D.sharedMaterial = _noFrictionMaterial;
-            }
-            else
+            _isOnSlope = _slopeCheckRight.IsOnSlope ? !_slopeCheckLeft.IsOnSlope : _slopeCheckLeft.IsOnSlope ? !_slopeCheckRight.IsOnSlope : false;
+        }
+
+        if (moveInput == 0)
+        {
+            if (_isOnSlope == true)
             {
                 _rg2D.sharedMaterial = _fullFrictionMaterial;
             }
+            else if (_rg2D.sharedMaterial != _noFrictionMaterial)
+            {
+                _rg2D.sharedMaterial = _noFrictionMaterial;
+            }
         }
+        else
+        {
+            if (_rg2D.sharedMaterial != _noFrictionMaterial)
+            {
+                _rg2D.sharedMaterial = _noFrictionMaterial;
+            }
+        }
+
+        return _isOnSlope;
     }
 }
