@@ -9,7 +9,6 @@ public class PlayerController : MonoBehaviour
     private InputAction _jumpInputAction = null;
     [SerializeField] private Rigidbody2D _rg2D = null;
     [SerializeField] private GroundCheck _groundCheck = null;
-    [SerializeField] private SlopeCheck _slopeCheck = null;
 
     [SerializeField] private float _moveSpeed = 10.0f;
     [SerializeField] private float _jumpSpeed = 30.0f;
