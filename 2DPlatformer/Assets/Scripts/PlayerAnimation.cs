@@ -25,27 +25,6 @@ public class PlayerAnimation : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        //_moveDirection = _playerController.GetMovementInput().x;
-
-        //// Flip
-        //if (Math.Abs(_moveDirection) > 0 && _moveDirection != this.transform.localScale.x)
-        //{
-        //    this.gameObject.transform.localScale = new Vector2(_moveDirection, 1);
-        //}
-
-        //_animator.SetFloat("VeloX", Math.Abs(_moveDirection));
-        //_animator.SetFloat("VeloY", _rg2D.linearVelocityY);
-        //_animator.SetBool("IsGrounded", _groundCheck.IsGrounded);
-
-        // Check to see if this is technically better or worse performance wise
-        //if (_groundCheck.IsGrounded == true)
-        //{
-        //    _animator.SetBool("IsGrounded", _groundCheck.IsGrounded);
-        //}
-    }
-
     public void UpdateAnimations(float moveInput)
     {
         _moveDirection = moveInput;

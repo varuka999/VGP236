@@ -114,7 +114,6 @@ MonoBehaviour:
   _playerAnimation: {fileID: -8726521859101222358}
   _rg2D: {fileID: 6878041851619059239}
   _groundCheck: {fileID: 985255882307252043}
-  _slopeCheck: {fileID: 5234357736825216751}
   _moveSpeed: 5
   _jumpSpeed: 20
 --- !u!114 &-8726521859101222358
@@ -434,7 +433,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8149016220710024800
 Transform:
   m_ObjectHideFlags: 0
@@ -494,7 +493,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 0.15}
+  m_Size: {x: 0.76, y: 0.15}
   m_EdgeRadius: 0
 --- !u!1 &6903889245295401376
 GameObject:
