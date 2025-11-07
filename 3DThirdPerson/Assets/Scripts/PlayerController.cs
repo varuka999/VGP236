@@ -108,7 +108,7 @@ public class PlayerController : MonoBehaviour
         }
 
         _xRotation = Mathf.Clamp(_xRotation, _minLookRotation, _maxLookRotation);
-        Debug.Log(_xRotation);
+        //Debug.Log(_xRotation);
         _lookTarget.localRotation = Quaternion.Euler(_xRotation, 0.0f, 0.0f);
     }
 

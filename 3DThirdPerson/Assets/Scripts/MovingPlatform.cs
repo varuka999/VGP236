@@ -20,7 +20,7 @@ public class MovingPlatform : MonoBehaviour
 
     private void FixedUpdate()
     {
-        DoMovement();
+        //DoMovement();
     }
 
 
