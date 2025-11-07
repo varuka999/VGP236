@@ -11,7 +11,6 @@ public class PlayerController : MonoBehaviour
     private InputAction _jumpAction = null;
     private InputAction _lookAction = null;
 
-
     [SerializeField] private float _moveSpeed = 0.0f;
     [SerializeField] private float _rotationSpeed = 0.0f;
     [SerializeField] private float _jumpSpeed = 0.0f;
@@ -101,11 +100,11 @@ public class PlayerController : MonoBehaviour
 
         if (_invertY == true)
         {
-            _xRotation -= lookDelta.y;
+            _xRotation += lookDelta.y;
         }
         else
         {
-            _xRotation += lookDelta.x;
+            _xRotation -= lookDelta.y;
         }
 
         _xRotation = Mathf.Clamp(_xRotation, _minLookRotation, _maxLookRotation);
