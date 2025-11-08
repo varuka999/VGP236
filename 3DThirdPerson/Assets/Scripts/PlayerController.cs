@@ -108,7 +108,7 @@ public class PlayerController : MonoBehaviour
         }
 
         _xRotation = Mathf.Clamp(_xRotation, _minLookRotation, _maxLookRotation);
-        //Debug.Log(_xRotation);
+
         _lookTarget.localRotation = Quaternion.Euler(_xRotation, 0.0f, 0.0f);
     }
 
@@ -119,6 +119,20 @@ public class PlayerController : MonoBehaviour
             Vector3 velocity = _rigidBody.linearVelocity;
             velocity.y = _jumpSpeed;
             _rigidBody.linearVelocity = velocity;
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.tag == "SpikedObstacle")
+        {
+            Debug.Log("Spiked Object!");
+            Transform checkpoint = CheckpointManager.Instance.CurrentCheckPoint;
+            if (checkpoint != null)
+            {
+                this.gameObject.transform.position = checkpoint.position;
+                _lookTarget.localRotation = Quaternion.Euler(checkpoint.rotation.x, checkpoint.rotation.y, checkpoint.rotation.z);
+            }
         }
     }
 }

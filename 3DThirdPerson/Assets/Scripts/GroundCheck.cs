@@ -2,14 +2,14 @@ using UnityEngine;
 
 public class GroundCheck : MonoBehaviour
 {
-    private int groundContacts = 0;
-    public bool IsGrounded { get { return groundContacts > 0; } }
+    private int _groundContacts = 0;
+    public bool IsGrounded { get { return _groundContacts > 0; } }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Ground")
         {
-            ++groundContacts;
+            ++_groundContacts;
         }
 
     }
@@ -18,7 +18,7 @@ public class GroundCheck : MonoBehaviour
     {
         if (other.tag == "Ground")
         {
-            --groundContacts;
+            --_groundContacts;
         }
     }
 }
