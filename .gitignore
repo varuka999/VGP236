@@ -106,3 +106,7 @@ InitTestScene*.unity*
 /2DPlatformer/Library/
 /3DThirdPerson/Temp/
 /3DThirdPerson/Library/
+/3DNavMesh/Temp/
+/3DNavMesh/Library/
+
+!*/Build/
