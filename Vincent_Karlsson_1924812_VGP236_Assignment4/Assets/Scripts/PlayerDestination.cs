@@ -30,7 +30,7 @@ public class PlayerDestination : MonoBehaviour
         _inputActions.Enable();
         _clickAction.Enable();
 
-        OnMouseClickEvent.AddListener(_player.SetDestination);
+        //OnMouseClickEvent.AddListener(_player.SetDestination);
     }
 
     private void OnEnable()
@@ -67,7 +67,7 @@ public class PlayerDestination : MonoBehaviour
 
                 if (OnMouseClickEvent != null)
                 {
-                    OnMouseClickEvent?.Invoke(this.transform.position);
+                    //OnMouseClickEvent?.Invoke(this.transform.position);
                 }
             }
         }
