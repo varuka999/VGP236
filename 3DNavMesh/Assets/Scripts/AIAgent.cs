@@ -64,11 +64,15 @@ public class AIAgent : MonoBehaviour
 
     private void StartWander()
     {
-        Vector2 radiusOffset = UnityEngine.Random.insideUnitCircle.normalized * _wanderData.moveRange;
-        _wanderData.currentTarget.x = _wanderData.centerPoint.x + radiusOffset.x;
-        _wanderData.currentTarget.z = _wanderData.centerPoint.z + radiusOffset.y; // y inside unit circle vector2
-        _wanderData.currentTarget.y = _wanderData.centerPoint.y;
-        _wanderData.currentUpdateTime = UnityEngine.Random.Range(_wanderData.minUpdate, _wanderData.maxUpdate);
+        //Vector2 radiusOffset = UnityEngine.Random.insideUnitCircle.normalized * _wanderData.moveRange;
+        //_wanderData.currentTarget.x = _wanderData.centerPoint.x + radiusOffset.x;
+        //_wanderData.currentTarget.z = _wanderData.centerPoint.z + radiusOffset.y; // y inside unit circle vector2
+        //_wanderData.currentTarget.y = _wanderData.centerPoint.y;
+        //_wanderData.currentUpdateTime = UnityEngine.Random.Range(_wanderData.minUpdate, _wanderData.maxUpdate);
+
+        Waypoint waypoint = WaypointManager.Instance.GetRandomWaypoint();
+        _wanderData.currentTarget = waypoint.transform.position;
+        _wanderData.currentUpdateTime = 15f;
         SetDestination(_wanderData.currentTarget);
         _state = BehaviorState.Wander;
     }
@@ -133,7 +137,7 @@ public class AIAgent : MonoBehaviour
 
             if (_seekData.currentCantFindTime <= 0.0f)
             {
-                DoWander();
+                StartWander();
             }
         }
         else
