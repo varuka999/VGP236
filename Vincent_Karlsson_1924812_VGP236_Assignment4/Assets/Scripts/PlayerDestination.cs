@@ -11,9 +11,6 @@ public class PlayerDestination : MonoBehaviour
     private MouseClick _inputActions = null;
     private InputAction _clickAction = null;
 
-    [SerializeField] private float _gizmoRadius = 1.0f;
-    [SerializeField] private Color _gizmoColor = Color.green;
-
     static public PlayerDestination Instance { get => _instance; }
 
     public void Initialize(PlayerController _player)
@@ -71,11 +68,5 @@ public class PlayerDestination : MonoBehaviour
                 }
             }
         }
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = _gizmoColor;
-        Gizmos.DrawWireSphere(transform.position, _gizmoRadius);
     }
 }
