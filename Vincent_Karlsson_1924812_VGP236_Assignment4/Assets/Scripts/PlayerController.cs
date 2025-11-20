@@ -5,6 +5,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Rigidbody _rigidBody = null;
     [SerializeField] private Transform _lookTarget = null;
+    [SerializeField] private Transform _lightTarget = null;
     private PlayerInput _playerInput = null;
     private InputAction _moveAction = null;
     private InputAction _lookAction = null;
@@ -105,5 +106,6 @@ public class PlayerController : MonoBehaviour
         _xRotation = Mathf.Clamp(_xRotation, _minLookRotation, _maxLookRotation);
 
         _lookTarget.localRotation = Quaternion.Euler(_xRotation, 0.0f, 0.0f);
+        _lightTarget.localRotation = Quaternion.Euler(_xRotation, 0.0f, 0.0f);
     }
 }
