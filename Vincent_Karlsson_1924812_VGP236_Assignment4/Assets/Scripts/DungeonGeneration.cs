@@ -1,40 +1,53 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.AI.Navigation;
 using UnityEngine;
 
 public class DungeonGeneration : MonoBehaviour
 {
-    private List<DungeonRoom> _dungeon = new List<DungeonRoom>();
-    private DungeonRoom[] _dungeonArray;
-    private DungeonRoom _exitRoom;
+    private List<DungeonRoomData> _dungeon = new List<DungeonRoomData>();
+    //private List<GameObject> _dungeon = new List<GameObject>();
+    //private DungeonRoomData[] _dungeonArray;
+    private DungeonRoomData _exitRoom = null;
+    [SerializeField] private GameObject _dungeonRoomPrefab = null;
+    [SerializeField] private GameObject _dungeonRoomPrefab2 = null;
+    [SerializeField] private GameObject _dungeonFloor = null;
 
-    [SerializeField] private int _widthBase = 5;
-    [SerializeField] private int _heightBase = 5;
-
+    [SerializeField] private int _base = 20;
+    //[SerializeField] private int _widthBase = 5;
+    //[SerializeField] private int _heightBase = 5;
     private int _width = 0;
+
 
     private void Awake()
     {
         _dungeon.Clear();
         DungeonGenerationTest();
+        InstantiateMap();
     }
 
     public void DungeonGenerationTest()
     {
-        int width = _widthBase + Random.Range(0, 5);
-        int height = _heightBase + Random.Range(0, 5);
+        int width = _base;
+        int height = _base;
         int dimension = width * height;
         int centerX = width / 2;
         int centerY = height / 2;
         int centerIndex = centerY * width + centerX;
-        int numberOfRoomsToGenerate = (dimension / 3) + Random.Range(0, dimension / 3);
-        _width = width;
+        //int numberOfRoomsToGenerate = (dimension / 2) + UnityEngine.Random.Range(0, dimension / 3);
+        //int numberOfRoomsToGenerate = (int)(dimension / 2.2) + UnityEngine.Random.Range(dimension / 4, dimension / 3); // 70-78% filled, Ex, Dimension = 100, num = 50 + (25~33)
+        int numberOfRoomsToGenerate = (int)UnityEngine.Random.Range(dimension * 0.43f, dimension * 0.58f); // 75~87%
+        _width = _base;
 
-        _dungeon = Enumerable.Repeat<DungeonRoom>(null, dimension).ToList(); // Resizes the List to be X number of null, where X is equal to dimension
+        Debug.Log(dimension);
+        Debug.Log(numberOfRoomsToGenerate);
+
+        _dungeon = Enumerable.Repeat<DungeonRoomData>(null, dimension).ToList(); // Resizes the List to be X number of null, where X is equal to dimension
         List<int> roomIndexList = new List<int>(); // Keeps tarck of the index of each room that has been created
 
         int currentRoomIndex = centerIndex;
-        int maxBranchLength = width + Random.Range(0, height / 2);
+        int maxBranchLength = width + UnityEngine.Random.Range(0, height / 2);
         int currentBranchLength = 0;
         int failedToCreateRoomCounter = 0;
         int resetToCenterCounter = 0;
@@ -42,7 +55,7 @@ public class DungeonGeneration : MonoBehaviour
         for (int i = 0; i < numberOfRoomsToGenerate; ++i)
         {
             // If the generation process has been forced to reset too many times before the desired room amount, end the process early
-            if (resetToCenterCounter >= 0)
+            if (resetToCenterCounter >= 50)
             {
                 break;
             }
@@ -50,15 +63,15 @@ public class DungeonGeneration : MonoBehaviour
             // First room is always created in the center of the map
             if (_dungeon[currentRoomIndex] == null)
             {
-                _dungeon[currentRoomIndex] = new DungeonRoom(currentRoomIndex, width);
+                _dungeon[currentRoomIndex] = new DungeonRoomData(currentRoomIndex, width);
                 roomIndexList.Add(currentRoomIndex);
             }
             else
             {
                 int nextRoomIndex = 0;
-                int direction = Random.Range(0, 4); // 0-3, North = 0, East = 1, South = 2, West = 3
+                int direction = UnityEngine.Random.Range(0, 4); // 0-3, North = 0, East = 1, South = 2, West = 3
                 int oppositeDirection = (direction + 2) % 4; // Remainder always returns opposide direction (ex, 3 + 2 = 5, 5 % 4 = 1, remainder 1; Direction = 3 = West, Opposite = 1 = East)
-                int safteCounter = 0;
+                //int safteCounter = 0;
 
                 // Creates a new room based on the direction if there is empty space or is not out of boundss
                 // If a new room can't be created, move the current room to the existing room
@@ -97,7 +110,8 @@ public class DungeonGeneration : MonoBehaviour
                     // Creates a new room if the index space if empty
                     if (_dungeon[nextRoomIndex] == null)
                     {
-                        _dungeon[nextRoomIndex] = new DungeonRoom(_dungeon[currentRoomIndex], oppositeDirection, nextRoomIndex, width);
+
+                        _dungeon[nextRoomIndex] = new DungeonRoomData(_dungeon[currentRoomIndex], oppositeDirection, nextRoomIndex, width);
                         _dungeon[currentRoomIndex].SetConnection(_dungeon[nextRoomIndex], direction); // Need to also set the connection from the previous room to the new room (connections are 2 way)
                         roomIndexList.Add(nextRoomIndex);
 
@@ -105,7 +119,7 @@ public class DungeonGeneration : MonoBehaviour
                         failedToCreateRoomCounter = 0;
 
                         // Check neighbouring rooms and make any new available connections
-                        for (int d = 0; d < 4; ++i)
+                        for (int d = 0; d < 4; ++d)
                         {
                             if (IsNextRoomInBounds(nextRoomIndex, d, height) == true)
                             {
@@ -124,7 +138,7 @@ public class DungeonGeneration : MonoBehaviour
                     {
                         // --i makes sure the process creates the desired number of rooms
                         --i;
-                        ++failedToCreateRoomCounter;
+                        //++failedToCreateRoomCounter;
                     }
 
                     // Controls an aspect of room generation by resetting to the center after a particular number of rooms has been created
@@ -139,7 +153,7 @@ public class DungeonGeneration : MonoBehaviour
                     if (failedToCreateRoomCounter >= 10)
                     {
                         failedToCreateRoomCounter = 0;
-                        ++resetToCenterCounter;
+                        //++resetToCenterCounter;
 
                         currentRoomIndex = centerIndex;
                         //currentRoomIndex = roomIndexList[Random.Range(0, roomIndexList.Count)]; // Alternate generation, resets to a random room that has already been created instead of center
@@ -151,25 +165,29 @@ public class DungeonGeneration : MonoBehaviour
                     break;
                 }
             }
+
+            //DebugPrintDungeon();
         }
 
-        int startingRoomIndex = roomIndexList[Random.Range(0, roomIndexList.Count)];
-        int exitRoomIndex = roomIndexList[Random.Range(0, roomIndexList.Count)];
-        int safetyCounter = 0;
+        Debug.Log(roomIndexList.Count());
 
-        // Attempts to have the exit be at least a certain distance from the starting room (safety counter to avoid bad RNG causing lag spike)
-        while (Mathf.Abs(_dungeon[exitRoomIndex].CoordinateX - _dungeon[startingRoomIndex].CoordinateX)
-            + Mathf.Abs(_dungeon[exitRoomIndex].CoordinateY - _dungeon[startingRoomIndex].CoordinateY) < (width / 2)
-            || safetyCounter < 50)
-        {
-            exitRoomIndex = roomIndexList[Random.Range(0, roomIndexList.Count)];
-            ++safetyCounter;
-        }
+        //int startingRoomIndex = roomIndexList[Random.Range(0, roomIndexList.Count)];
+        //int exitRoomIndex = roomIndexList[Random.Range(0, roomIndexList.Count)];
+        //int safetyCounter = 0;
 
-        // Assigns starting and exit room
-        // UpdateCurrentRoom (tells player where to spawn?)
-        _exitRoom = _dungeon[exitRoomIndex];
-        _exitRoom.SetAsExitRoom();
+        //// Attempts to have the exit be at least a certain distance from the starting room (safety counter to avoid bad RNG causing lag spike)
+        //while (Mathf.Abs(_dungeon[exitRoomIndex].CoordinateX - _dungeon[startingRoomIndex].CoordinateX)
+        //    + Mathf.Abs(_dungeon[exitRoomIndex].CoordinateY - _dungeon[startingRoomIndex].CoordinateY) < (width / 2)
+        //    || safetyCounter < 50)
+        //{
+        //    exitRoomIndex = roomIndexList[Random.Range(0, roomIndexList.Count)];
+        //    ++safetyCounter;
+        //}
+
+        //// Assigns starting and exit room
+        //// UpdateCurrentRoom (tells player where to spawn?)
+        //_exitRoom = _dungeon[exitRoomIndex];
+        //_exitRoom.SetAsExitRoom();
     }
 
     // Adjustment refers to how many clockwise direction changes (1 would be North -> East, whereas 2 would be North -> South)
@@ -222,7 +240,7 @@ public class DungeonGeneration : MonoBehaviour
         }
     }
 
-    private bool ReturnIfRoomIsAdjacent(DungeonRoom adjacentRoom, DungeonRoom currentRoom)
+    private bool ReturnIfRoomIsAdjacent(DungeonRoomData adjacentRoom, DungeonRoomData currentRoom)
     {
         if (adjacentRoom.NorthConnection == currentRoom)
         {
@@ -243,4 +261,70 @@ public class DungeonGeneration : MonoBehaviour
 
         return false;
     }
+
+    public void DebugPrintDungeon()
+    {
+        Console.Clear();
+        //Console.WriteLine(temp_IterationCounter.ToString() + "\n");
+
+        for (int i = 0, j = 0; i < _dungeon.Count(); ++i, ++j)
+        {
+            if (j >= _width)
+            {
+                Console.WriteLine();
+                j = 0;
+            }
+
+            if (_dungeon[i] == null)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write("# ");
+                Console.ResetColor();
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write("# ");
+                Console.ResetColor();
+            }
+        }
+    }
+
+    private void InstantiateMap()
+    {
+        List<GameObject> gameObjects = new List<GameObject>();
+
+        for (int i = 0, c = 0, r = 0; i < _dungeon.Count(); ++i, ++c)
+        {
+            if (c >= _width)
+            {
+                ++r;
+                c = 0;
+            }
+
+            if (_dungeon[i] == null)
+            {
+                Instantiate(_dungeonRoomPrefab2, new Vector3(c * 5, 0.5f, r * 5), Quaternion.Euler(0, 0, 0));
+            }
+            else
+            {
+                gameObjects.Add(Instantiate(_dungeonRoomPrefab, new Vector3(c * 5, 0.5f, r * 5), Quaternion.Euler(0, 0, 0)));
+            }
+        }
+
+        _dungeonFloor.GetComponent<NavMeshSurface>().BuildNavMesh();
+
+        //gameObjects[0].GetComponent<NavMeshSurface>().BuildNavMesh();
+
+        //UpdateNavMesh(gameObjects);
+    }
+
+    private void UpdateNavMesh(List<GameObject> gObjects)
+    {
+        foreach (GameObject go in gObjects)
+        {
+            go.GetComponent<NavMeshSurface>().BuildNavMesh();
+        }
+    }
 }
+

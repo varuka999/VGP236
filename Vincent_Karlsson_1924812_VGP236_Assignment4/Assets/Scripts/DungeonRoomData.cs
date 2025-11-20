@@ -1,43 +1,50 @@
+using System;
 using UnityEngine;
-using System.Collections.Generic;
 
-public class DungeonRoom : MonoBehaviour
+[Serializable]
+public class DungeonRoomData
 {
     private int _index = 0;
     private int _coordinateX = 0;
     private int _coordinateY = 0;
     private bool _isExit = false;
 
-    private DungeonRoom _northConnection = null;
-    private DungeonRoom _eastConnection = null;
-    private DungeonRoom _southConnection = null;
-    private DungeonRoom _westConnection = null;
+    public bool _isRoom = false;
+
+    private DungeonRoomData _northConnection = null;
+    private DungeonRoomData _eastConnection = null;
+    private DungeonRoomData _southConnection = null;
+    private DungeonRoomData _westConnection = null;
 
     public int CoordinateX { get => _coordinateX; }
     public int CoordinateY { get => _coordinateY; }
-    public DungeonRoom NorthConnection { get => _northConnection; }
-    public DungeonRoom EastConnection { get => _eastConnection; }
-    public DungeonRoom SouthConnection { get => _southConnection; }
-    public DungeonRoom WestConnection { get => _westConnection; }
+    public DungeonRoomData NorthConnection { get => _northConnection; }
+    public DungeonRoomData EastConnection { get => _eastConnection; }
+    public DungeonRoomData SouthConnection { get => _southConnection; }
+    public DungeonRoomData WestConnection { get => _westConnection; }
 
     // Index (point), Width for coordinates
-    public DungeonRoom(int index, int width)
+    public DungeonRoomData(int index, int width)
     {
         _index = index;
         _coordinateX = index % width;
         _coordinateY = index / width;
+
+        _isRoom = true;
     }
 
-    public DungeonRoom(DungeonRoom connectingRoom, int direction, int index, int width)
+    public DungeonRoomData(DungeonRoomData connectingRoom, int direction, int index, int width)
     {
         _index = index;
         _coordinateX = index % width;
         _coordinateY = index / width;
 
         SetConnection(connectingRoom, direction);
+
+        _isRoom = true;
     }
 
-    public void SetConnection(DungeonRoom connectingRoom, int direction)
+    public void SetConnection(DungeonRoomData connectingRoom, int direction)
     {
         switch (direction)
         {
