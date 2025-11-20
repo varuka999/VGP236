@@ -13,7 +13,7 @@ public class PlayerDestination : MonoBehaviour
 
     static public PlayerDestination Instance { get => _instance; }
 
-    public void Initialize(PlayerController _player)
+    public void Initialize(TEMP_PlayerController _player)
     {
         if (_instance == null)
         {

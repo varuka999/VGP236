@@ -20,14 +20,14 @@ public class DungeonGeneration : MonoBehaviour
     private int _width = 0;
 
 
-    private void Awake()
+    public void Initialize()
     {
         _dungeon.Clear();
         DungeonGenerationTest();
         InstantiateMap();
     }
 
-    public void DungeonGenerationTest()
+    private void DungeonGenerationTest()
     {
         int width = _base;
         int height = _base;
@@ -200,22 +200,22 @@ public class DungeonGeneration : MonoBehaviour
     private bool IsNextRoomInBounds(int currentRoomIndex, int direction, int height)
     {
         // North
-        if (direction == 0 && currentRoomIndex < _width) // Current room is in the top row
+        if (direction == 0 && currentRoomIndex < _width * 2) // Current room is in the top row
         {
             return false;
         }
         // East
-        if (direction == 1 && currentRoomIndex % _width == _width - 1) // Current room is in the right most column
+        if (direction == 1 && currentRoomIndex % _width >= _width - 2) // Current room is in the right most column
         {
             return false;
         }
         // South
-        if (direction == 2 && currentRoomIndex >= (_width * (height - 1))) // Current room is in the bottom row
+        if (direction == 2 && currentRoomIndex >= (_width * (height - 2))) // Current room is in the bottom row
         {
             return false;
         }
         // West
-        if (direction == 3 && currentRoomIndex % _width == 0) // Current room is in the left most column
+        if (direction == 3 && currentRoomIndex % _width <= 1) // Current room is in the left most column
         {
             return false;
         }
@@ -262,7 +262,7 @@ public class DungeonGeneration : MonoBehaviour
         return false;
     }
 
-    public void DebugPrintDungeon()
+    private void DebugPrintDungeon()
     {
         Console.Clear();
         //Console.WriteLine(temp_IterationCounter.ToString() + "\n");
