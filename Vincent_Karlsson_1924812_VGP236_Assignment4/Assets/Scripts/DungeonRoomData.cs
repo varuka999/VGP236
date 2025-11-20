@@ -5,8 +5,8 @@ using UnityEngine;
 public class DungeonRoomData
 {
     private int _index = 0;
-    private int _coordinateX = 0;
-    private int _coordinateY = 0;
+    private int _coordinateC = 0;
+    private int _coordinateR = 0;
     private bool _isExit = false;
 
     public bool _isRoom = false;
@@ -16,19 +16,20 @@ public class DungeonRoomData
     private DungeonRoomData _southConnection = null;
     private DungeonRoomData _westConnection = null;
 
-    public int CoordinateX { get => _coordinateX; }
-    public int CoordinateY { get => _coordinateY; }
+    public int Index { get => _index; }
+    public int CoordinateC { get => _coordinateC; }
+    public int CoordinateR { get => _coordinateR; }
     public DungeonRoomData NorthConnection { get => _northConnection; }
     public DungeonRoomData EastConnection { get => _eastConnection; }
     public DungeonRoomData SouthConnection { get => _southConnection; }
     public DungeonRoomData WestConnection { get => _westConnection; }
+    public bool IsExit { get => _isExit; }
 
-    // Index (point), Width for coordinates
     public DungeonRoomData(int index, int width)
     {
         _index = index;
-        _coordinateX = index % width;
-        _coordinateY = index / width;
+        _coordinateC = index % width;
+        _coordinateR = index / width;
 
         _isRoom = true;
     }
@@ -36,14 +37,15 @@ public class DungeonRoomData
     public DungeonRoomData(DungeonRoomData connectingRoom, int direction, int index, int width)
     {
         _index = index;
-        _coordinateX = index % width;
-        _coordinateY = index / width;
+        _coordinateC = index % width;
+        _coordinateR = index / width;
 
         SetConnection(connectingRoom, direction);
 
         _isRoom = true;
     }
 
+    // Redo connections to use array of DungeonRoomData
     public void SetConnection(DungeonRoomData connectingRoom, int direction)
     {
         switch (direction)

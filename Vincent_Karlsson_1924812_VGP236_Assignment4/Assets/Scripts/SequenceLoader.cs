@@ -2,39 +2,47 @@ using UnityEngine;
 
 public class SequenceLoader : MonoBehaviour
 {
-    [SerializeField] private TEMP_PlayerController _playerControllerScript = null;
-    [SerializeField] private PlayerDestination _playerDestinationScript = null;
-    [SerializeField] private DungeonGeneration _dungeonGenerationScript = null;
+    //[SerializeField] private DungeonManager _dungeonManagerScript = null;
+    [SerializeField] private EnemySpawner _enemySpawner;
+    [SerializeField] private GameObject _dungeonManagerPrefab = null;
+    [SerializeField] private GameObject _playerPrefab;
+    // Enemies to spawn/EnemySpawner
 
     private void Awake()
     {
-        if (_dungeonGenerationScript != null)
+        if (_dungeonManagerPrefab != null)
         {
-            _dungeonGenerationScript.Initialize();
+            _dungeonManagerPrefab.GetComponent<DungeonManager>().Initialize();
         }
         else
         {
-            Debug.LogError("Missing: Dungeon Generation");
+            Debug.LogError("Missing: Dungeon Manager");
+            //return;
+        }
+
+        if (_playerPrefab != null)
+        {
+
+            GameObject player = Instantiate(_playerPrefab);
+            player.GetComponent<PlayerController>().Initialize();
+        }
+        else
+        {
+            Debug.LogError("Missing: Player Prefab");
             return;
         }
 
-        if (_playerControllerScript != null)
+        if (_playerPrefab != null)
         {
-            _playerControllerScript.Initialize();
+
+            _enemySpawner.Initialize(_dungeonManagerPrefab);
         }
         else
         {
-            Debug.LogError("Missing: Player Controller");
+            Debug.LogError("Missing: Enemy Spawner");
             return;
         }
 
-        if (_playerDestinationScript != null)
-        {
-            _playerDestinationScript.Initialize(_playerControllerScript);
-        }
-        else
-        {
-            Debug.LogError("Missing: Player Destination");
-        }
+
     }
 }

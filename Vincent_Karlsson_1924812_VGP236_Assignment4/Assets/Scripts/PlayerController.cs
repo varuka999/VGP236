@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     private float _xRotation = 0.0f;
 
 
-    private void Awake()
+    public void Initialize()
     {
         if (_rigidBody == null)
         {
@@ -33,6 +33,8 @@ public class PlayerController : MonoBehaviour
         _lookAction = _playerInput.Player.Look;
 
         Cursor.lockState = CursorLockMode.Locked;
+
+        this.gameObject.SetActive(true);
     }
 
     private void OnEnable()

@@ -1,51 +1,31 @@
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.InputSystem;
 
 public class AIController : MonoBehaviour
 {
-    private MouseClick _inputActions = null;
-    private InputAction _clickAction = null;
+    [SerializeField] protected NavMeshAgent _agent = null;
+    [SerializeField] protected Transform _target;
 
-    [SerializeField] private float _gizmoRadius = 1.0f;
-    [SerializeField] private Color _gizmoColor = Color.green;
+    [SerializeField] protected float _moveSpeed = 0.0f;
+    [SerializeField] protected float _rotationSpeed = 0.0f;
+    //[SerializeField] protected float _resetTimer = 0.0f;
 
-    private void Awake()
+    public virtual void Initialize(Transform target)
     {
-        _inputActions = new MouseClick();
-        _clickAction = _inputActions.Mouse.Click;
-        _clickAction.performed += OnMouseClick;
+        _target = target;
     }
 
-    private void OnEnable()
+    protected virtual void Update()
     {
-        _inputActions.Enable();
-        _clickAction.Enable();
-    }
-
-    private void OnDisable()
-    {
-        _inputActions.Disable();
-        _clickAction.Disable();
-    }
-
-    void OnMouseClick(InputAction.CallbackContext context)
-    {
-        Vector2 mousePosition = Mouse.current.position.ReadValue();
-        Ray cameraRay = Camera.main.ScreenPointToRay(mousePosition);
-        RaycastHit hitInfo;
-
-        if (Physics.Raycast(cameraRay, out hitInfo, 100.0f) == true)
+        if (_agent != null)
         {
-            if (hitInfo.collider != null)
-            {
-                transform.position = hitInfo.point;
-            }
+            SetDestination(_target.position);
         }
     }
 
-    private void OnDrawGizmos()
+    protected virtual void SetDestination(Vector3 destination)
     {
-        Gizmos.color = _gizmoColor;
-        Gizmos.DrawWireSphere(transform.position, _gizmoRadius);
+        _agent.SetDestination(destination);
     }
 }

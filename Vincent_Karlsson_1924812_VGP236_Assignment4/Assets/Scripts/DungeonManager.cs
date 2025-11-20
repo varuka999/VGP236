@@ -4,30 +4,42 @@ using System.Linq;
 using Unity.AI.Navigation;
 using UnityEngine;
 
-public class DungeonGeneration : MonoBehaviour
+public class DungeonManager : MonoBehaviour
 {
+    //public static DungeonManager Instance = null;
+
     private List<DungeonRoomData> _dungeon = new List<DungeonRoomData>();
-    //private List<GameObject> _dungeon = new List<GameObject>();
-    //private DungeonRoomData[] _dungeonArray;
+    List<int> _roomIndexList = new List<int>(); // Keeps tarck of the index of each room that has been created
     private DungeonRoomData _exitRoom = null;
+
     [SerializeField] private GameObject _dungeonRoomPrefab = null;
-    [SerializeField] private GameObject _dungeonRoomPrefab2 = null;
+    [SerializeField] private GameObject _dungeonWallPrefab = null;
     [SerializeField] private GameObject _dungeonFloor = null;
+    [SerializeField] private Transform _dungeonParent = null;
 
     [SerializeField] private int _base = 20;
     //[SerializeField] private int _widthBase = 5;
     //[SerializeField] private int _heightBase = 5;
     private int _width = 0;
 
+    public List<int> RoomIndexList { get => _roomIndexList; }
+    //public int ExitRoomID { get => _exitRoom != null ? _exitRoom.Index : _roomIndexList.Count() - 1; } // ? not sure why im doing it like this
+    public DungeonRoomData ExitRoom { get => _exitRoom; }
+    public int Width { get => _width; }
 
     public void Initialize()
     {
+        //if (Instance == null)
+        //{
+        //    Instance = new DungeonManager();
+        //}
+
         _dungeon.Clear();
-        DungeonGenerationTest();
+        DungeonProceduralGeneration();
         InstantiateMap();
     }
 
-    private void DungeonGenerationTest()
+    private void DungeonProceduralGeneration()
     {
         int width = _base;
         int height = _base;
@@ -44,7 +56,7 @@ public class DungeonGeneration : MonoBehaviour
         Debug.Log(numberOfRoomsToGenerate);
 
         _dungeon = Enumerable.Repeat<DungeonRoomData>(null, dimension).ToList(); // Resizes the List to be X number of null, where X is equal to dimension
-        List<int> roomIndexList = new List<int>(); // Keeps tarck of the index of each room that has been created
+
 
         int currentRoomIndex = centerIndex;
         int maxBranchLength = width + UnityEngine.Random.Range(0, height / 2);
@@ -55,7 +67,7 @@ public class DungeonGeneration : MonoBehaviour
         for (int i = 0; i < numberOfRoomsToGenerate; ++i)
         {
             // If the generation process has been forced to reset too many times before the desired room amount, end the process early
-            if (resetToCenterCounter >= 50)
+            if (resetToCenterCounter >= 50) // Not currently being used
             {
                 break;
             }
@@ -64,7 +76,7 @@ public class DungeonGeneration : MonoBehaviour
             if (_dungeon[currentRoomIndex] == null)
             {
                 _dungeon[currentRoomIndex] = new DungeonRoomData(currentRoomIndex, width);
-                roomIndexList.Add(currentRoomIndex);
+                _roomIndexList.Add(currentRoomIndex);
             }
             else
             {
@@ -113,7 +125,7 @@ public class DungeonGeneration : MonoBehaviour
 
                         _dungeon[nextRoomIndex] = new DungeonRoomData(_dungeon[currentRoomIndex], oppositeDirection, nextRoomIndex, width);
                         _dungeon[currentRoomIndex].SetConnection(_dungeon[nextRoomIndex], direction); // Need to also set the connection from the previous room to the new room (connections are 2 way)
-                        roomIndexList.Add(nextRoomIndex);
+                        _roomIndexList.Add(nextRoomIndex);
 
                         ++currentBranchLength;
                         failedToCreateRoomCounter = 0;
@@ -169,25 +181,25 @@ public class DungeonGeneration : MonoBehaviour
             //DebugPrintDungeon();
         }
 
-        Debug.Log(roomIndexList.Count());
+        Debug.Log(_roomIndexList.Count());
 
-        //int startingRoomIndex = roomIndexList[Random.Range(0, roomIndexList.Count)];
-        //int exitRoomIndex = roomIndexList[Random.Range(0, roomIndexList.Count)];
-        //int safetyCounter = 0;
+        int startingRoomIndex = _roomIndexList[UnityEngine.Random.Range(0, _roomIndexList.Count)];
+        int exitRoomIndex = _roomIndexList[UnityEngine.Random.Range(0, _roomIndexList.Count)];
+        int safetyCounter = 0;
 
-        //// Attempts to have the exit be at least a certain distance from the starting room (safety counter to avoid bad RNG causing lag spike)
-        //while (Mathf.Abs(_dungeon[exitRoomIndex].CoordinateX - _dungeon[startingRoomIndex].CoordinateX)
-        //    + Mathf.Abs(_dungeon[exitRoomIndex].CoordinateY - _dungeon[startingRoomIndex].CoordinateY) < (width / 2)
-        //    || safetyCounter < 50)
-        //{
-        //    exitRoomIndex = roomIndexList[Random.Range(0, roomIndexList.Count)];
-        //    ++safetyCounter;
-        //}
+        // Attempts to have the exit be at least a certain distance from the starting room (safety counter to avoid bad RNG causing lag spike)
+        while (Mathf.Abs(_dungeon[exitRoomIndex].CoordinateC - _dungeon[startingRoomIndex].CoordinateC)
+            + Mathf.Abs(_dungeon[exitRoomIndex].CoordinateR - _dungeon[startingRoomIndex].CoordinateR) < (width / 2)
+            || safetyCounter < 50)
+        {
+            exitRoomIndex = _roomIndexList[UnityEngine.Random.Range(0, _roomIndexList.Count)];
+            ++safetyCounter;
+        }
 
-        //// Assigns starting and exit room
-        //// UpdateCurrentRoom (tells player where to spawn?)
-        //_exitRoom = _dungeon[exitRoomIndex];
-        //_exitRoom.SetAsExitRoom();
+        // Assigns starting and exit room
+        // UpdateCurrentRoom (tells player where to spawn?)
+        _exitRoom = _dungeon[exitRoomIndex];
+        _exitRoom.SetAsExitRoom();
     }
 
     // Adjustment refers to how many clockwise direction changes (1 would be North -> East, whereas 2 would be North -> South)
@@ -265,7 +277,6 @@ public class DungeonGeneration : MonoBehaviour
     private void DebugPrintDungeon()
     {
         Console.Clear();
-        //Console.WriteLine(temp_IterationCounter.ToString() + "\n");
 
         for (int i = 0, j = 0; i < _dungeon.Count(); ++i, ++j)
         {
@@ -304,27 +315,15 @@ public class DungeonGeneration : MonoBehaviour
 
             if (_dungeon[i] == null)
             {
-                Instantiate(_dungeonRoomPrefab2, new Vector3(c * 5, 0.5f, r * 5), Quaternion.Euler(0, 0, 0));
+                Instantiate(_dungeonWallPrefab, new Vector3(c * 5, 0.5f, r * 5), Quaternion.Euler(0, 0, 0), _dungeonParent);
             }
             else
             {
-                gameObjects.Add(Instantiate(_dungeonRoomPrefab, new Vector3(c * 5, 0.5f, r * 5), Quaternion.Euler(0, 0, 0)));
+                gameObjects.Add(Instantiate(_dungeonRoomPrefab, new Vector3(c * 5, 0.5f, r * 5), Quaternion.Euler(0, 0, 0), _dungeonParent));
             }
         }
-
-        _dungeonFloor.GetComponent<NavMeshSurface>().BuildNavMesh();
-
-        //gameObjects[0].GetComponent<NavMeshSurface>().BuildNavMesh();
-
-        //UpdateNavMesh(gameObjects);
-    }
-
-    private void UpdateNavMesh(List<GameObject> gObjects)
-    {
-        foreach (GameObject go in gObjects)
-        {
-            go.GetComponent<NavMeshSurface>().BuildNavMesh();
-        }
+        
+        _dungeonFloor.GetComponent<NavMeshSurface>().BuildNavMesh(); // Updates the dungeon floor navmesh
     }
 }
 
