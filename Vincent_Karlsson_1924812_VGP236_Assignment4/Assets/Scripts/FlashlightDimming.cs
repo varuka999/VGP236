@@ -2,15 +2,12 @@ using UnityEngine;
 
 public class FlashlightDimming : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    [SerializeField] private Light _flashlight = null;
+    private float _flashlightTimer = 0.0f;
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        _flashlightTimer += Time.deltaTime;
+        _flashlight.intensity -= 0.01f * _flashlightTimer;
     }
 }

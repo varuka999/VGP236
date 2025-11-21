@@ -183,9 +183,9 @@ public class DungeonManager : MonoBehaviour
         int safetyCounter = 0;
 
         // Attempts to have the exit be at least a certain distance from the starting room (safety counter to avoid bad RNG causing lag spike)
-        while (Mathf.Abs(_dungeon[exitRoomIndex].CoordinateC - _dungeon[startingRoomIndex].CoordinateC)
-            + Mathf.Abs(_dungeon[exitRoomIndex].CoordinateR - _dungeon[startingRoomIndex].CoordinateR) < (width / 2)
-            || safetyCounter < 100)
+        while ((Mathf.Abs(_dungeon[exitRoomIndex].CoordinateC - _dungeon[startingRoomIndex].CoordinateC)
+            + Mathf.Abs(_dungeon[exitRoomIndex].CoordinateR - _dungeon[startingRoomIndex].CoordinateR) < (width / 2)) 
+            && safetyCounter < 100)
         {
             exitRoomIndex = _roomIndexList[UnityEngine.Random.Range(0, _roomIndexList.Count)];
             ++safetyCounter;
@@ -275,44 +275,20 @@ public class DungeonManager : MonoBehaviour
         return false;
     }
 
-    // Flawed, can return a room right next to the player
     public int GetRandomSpawnIndex()
     {
         int randomIndex = -1;
+        int safetyCounter = 0;
 
-        while (randomIndex == _exitRoom.Index || randomIndex == _startRoom.Index || randomIndex == -1)
+        while ((randomIndex == _exitRoom.Index || randomIndex == _startRoom.Index || randomIndex == -1
+            || Mathf.Abs(_dungeon[randomIndex].CoordinateC - _startRoom.CoordinateC) 
+            + Mathf.Abs(_dungeon[randomIndex].CoordinateR - _startRoom.CoordinateR) < (_width / 4)) && safetyCounter < 100)
         {
             randomIndex = _roomIndexList[UnityEngine.Random.Range(0, _roomIndexList.Count())];
+            ++safetyCounter;
         }
 
         return randomIndex;
-    }
-
-    private void DebugPrintDungeon()
-    {
-        Console.Clear();
-
-        for (int i = 0, j = 0; i < _dungeon.Count(); ++i, ++j)
-        {
-            if (j >= _width)
-            {
-                Console.WriteLine();
-                j = 0;
-            }
-
-            if (_dungeon[i] == null)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write("# ");
-                Console.ResetColor();
-            }
-            else
-            {
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write("# ");
-                Console.ResetColor();
-            }
-        }
     }
 
     private void InstantiateMap()
