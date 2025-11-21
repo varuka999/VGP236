@@ -17,6 +17,16 @@ public class AITerritory : AIController
 
     protected override void Update()
     {
+        switch (_state)
+        {
+            case State.Return:
+                break;
+            case State.Chase:
+                break;
+            default:
+                break;
+        }
+
         if (_chaseTimer > 0)
         {
             base.SetDestination(_target.position);
@@ -36,7 +46,14 @@ public class AITerritory : AIController
     {
         if (other.gameObject.tag == "Player")
         {
-            _chaseTimer = 3.0f;
+            _chaseTimer = 1.5f;
         }
+    }
+
+    protected void Chase()
+    {
+        base.SetDestination(_target.position);
+
+        _chaseTimer -= Time.deltaTime;
     }
 }

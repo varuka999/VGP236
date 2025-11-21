@@ -4,9 +4,16 @@ using UnityEngine.InputSystem;
 
 public class AIController : MonoBehaviour
 {
+    protected enum State
+    {
+        Return,
+        Chase,
+    }
+
     [SerializeField] protected NavMeshAgent _agent = null;
     [SerializeField] protected Transform _target;
 
+    [SerializeField] protected State _state = State.Return;
     [SerializeField] protected float _moveSpeed = 0.0f;
     //[SerializeField] protected float _rotationSpeed = 0.0f;
     //[SerializeField] protected float _resetTimer = 0.0f;

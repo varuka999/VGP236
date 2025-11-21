@@ -12,7 +12,6 @@ public class PlayerController : MonoBehaviour
     private InputAction _lookAction = null;
 
     [SerializeField] private float _moveSpeed = 0.0f;
-    [SerializeField] private float _rotationSpeed = 0.0f;
     [SerializeField] private float _lookSensitivity = 0.0f;
     [SerializeField] private float _deadZone = 0.0f;
     [SerializeField] private float _maxLookRotation = 0.0f;

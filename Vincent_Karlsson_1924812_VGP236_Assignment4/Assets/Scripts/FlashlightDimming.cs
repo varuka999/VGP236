@@ -7,7 +7,7 @@ public class FlashlightDimming : MonoBehaviour
 
     private void Update()
     {
-        _flashlightTimer += Time.deltaTime;
-        _flashlight.intensity -= 0.01f * _flashlightTimer;
+        //_flashlightTimer += Time.deltaTime;
+        _flashlight.intensity -= 0.02f;
     }
 }

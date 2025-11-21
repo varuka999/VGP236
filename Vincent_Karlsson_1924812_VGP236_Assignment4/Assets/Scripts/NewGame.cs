@@ -7,4 +7,9 @@ public class NewGame : MonoBehaviour
     {
         SceneManager.LoadScene(0);
     }
+
+    public void EndGame()
+    {
+        Application.Quit();
+    }
 }
