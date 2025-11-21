@@ -6,16 +6,17 @@ using UnityEngine;
 
 public class DungeonManager : MonoBehaviour
 {
-    //public static DungeonManager Instance = null;
-
     private List<DungeonRoomData> _dungeon = new List<DungeonRoomData>();
     List<int> _roomIndexList = new List<int>(); // Keeps tarck of the index of each room that has been created
+    private DungeonRoomData _startRoom = null;
     private DungeonRoomData _exitRoom = null;
 
     [SerializeField] private GameObject _dungeonRoomPrefab = null;
     [SerializeField] private GameObject _dungeonWallPrefab = null;
     [SerializeField] private GameObject _dungeonFloor = null;
     [SerializeField] private Transform _dungeonParent = null;
+    [SerializeField] private GameObject _startingLightPrefab = null;
+    [SerializeField] private GameObject _exitLightPrefab = null;
 
     [SerializeField] private int _base = 20;
     //[SerializeField] private int _widthBase = 5;
@@ -24,16 +25,12 @@ public class DungeonManager : MonoBehaviour
 
     public List<int> RoomIndexList { get => _roomIndexList; }
     //public int ExitRoomID { get => _exitRoom != null ? _exitRoom.Index : _roomIndexList.Count() - 1; } // ? not sure why im doing it like this
+    public DungeonRoomData StartRoom { get => _startRoom; }
     public DungeonRoomData ExitRoom { get => _exitRoom; }
     public int Width { get => _width; }
 
     public void Initialize()
     {
-        //if (Instance == null)
-        //{
-        //    Instance = new DungeonManager();
-        //}
-
         _dungeon.Clear();
         DungeonProceduralGeneration();
         InstantiateMap();
@@ -190,17 +187,20 @@ public class DungeonManager : MonoBehaviour
         // Attempts to have the exit be at least a certain distance from the starting room (safety counter to avoid bad RNG causing lag spike)
         while (Mathf.Abs(_dungeon[exitRoomIndex].CoordinateC - _dungeon[startingRoomIndex].CoordinateC)
             + Mathf.Abs(_dungeon[exitRoomIndex].CoordinateR - _dungeon[startingRoomIndex].CoordinateR) < (width / 2)
-            || safetyCounter < 50)
+            || safetyCounter < 100)
         {
             exitRoomIndex = _roomIndexList[UnityEngine.Random.Range(0, _roomIndexList.Count)];
             ++safetyCounter;
         }
 
         // Assigns starting and exit room
-        // UpdateCurrentRoom (tells player where to spawn?)
+        _startRoom = _dungeon[startingRoomIndex];
         _exitRoom = _dungeon[exitRoomIndex];
         _exitRoom.SetAsExitRoom();
 
+        Instantiate(_startingLightPrefab, new Vector3(_startRoom.CoordinateC * 5, 1.5f, _startRoom.CoordinateR * 5), Quaternion.Euler(0, 0, 0), _dungeonParent);
+        Instantiate(_exitLightPrefab, new Vector3(_exitRoom.CoordinateC * 5, 1.5f, _exitRoom.CoordinateR * 5), Quaternion.Euler(0, 0, 0), _dungeonParent);
+        
         Debug.Log(startingRoomIndex);
         Debug.Log(exitRoomIndex);
     }
@@ -277,6 +277,19 @@ public class DungeonManager : MonoBehaviour
         return false;
     }
 
+    // Flawed, can return a room right next to the player
+    public int GetRandomSpawnIndex()
+    {
+        int randomIndex = -1;
+
+        while (randomIndex == _exitRoom.Index || randomIndex == _startRoom.Index || randomIndex == -1)
+        {
+            randomIndex = _roomIndexList[UnityEngine.Random.Range(0, _roomIndexList.Count())];
+        }
+
+        return randomIndex;
+    }
+
     private void DebugPrintDungeon()
     {
         Console.Clear();
@@ -325,7 +338,7 @@ public class DungeonManager : MonoBehaviour
                 gameObjects.Add(Instantiate(_dungeonRoomPrefab, new Vector3(c * 5, 0.5f, r * 5), Quaternion.Euler(0, 0, 0), _dungeonParent));
             }
         }
-        
+
         _dungeonFloor.GetComponent<NavMeshSurface>().BuildNavMesh(); // Updates the dungeon floor navmesh
     }
 }

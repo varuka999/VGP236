@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -50,6 +51,8 @@ public class PlayerController : MonoBehaviour
         _playerInput.Disable();
         _moveAction.Disable();
         _lookAction.Disable();
+
+        Cursor.lockState = CursorLockMode.None;
     }
 
     private void Update()
@@ -107,5 +110,22 @@ public class PlayerController : MonoBehaviour
 
         _lookTarget.localRotation = Quaternion.Euler(_xRotation, 0.0f, 0.0f);
         _lightTarget.localRotation = Quaternion.Euler(_xRotation, 0.0f, 0.0f);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        // Reload the level (generate new map) if enemy touches player
+        if (collision.transform.tag == "Enemy")
+        {
+            SceneManager.LoadScene(0);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.transform.tag == "Exit")
+        {
+            SceneManager.LoadScene(1);
+        }
     }
 }

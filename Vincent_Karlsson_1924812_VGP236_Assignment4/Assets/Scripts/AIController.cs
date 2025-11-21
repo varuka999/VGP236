@@ -19,7 +19,7 @@ public class AIController : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (_agent != null)
+        if (_agent != null && _target != null)
         {
             SetDestination(_target.position);
         }

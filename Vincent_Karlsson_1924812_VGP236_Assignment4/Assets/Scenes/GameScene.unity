@@ -950,7 +950,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   _chasingAIPrefab: {fileID: 3383830307501921930, guid: 1eda8edd075a05642b9e40b367df58ec, type: 3}
-  _territoryAIPrefab: {fileID: 0}
+  _territoryAIPrefab: {fileID: 3383830307501921930, guid: dde8d153b7de55345bc34ca9c361425b, type: 3}
   _wanderingAIPrefab: {fileID: 3383830307501921930, guid: 8b6f0ae939c23854f91e1f8af29f4d20, type: 3}
 --- !u!4 &864302142
 Transform:
@@ -2274,6 +2274,8 @@ MonoBehaviour:
   _dungeonWallPrefab: {fileID: 8092750975248694417, guid: ae79629c8ddde604cb880bc0ceee3ae5, type: 3}
   _dungeonFloor: {fileID: 1177154446}
   _dungeonParent: {fileID: 415655977}
+  _startingLightPrefab: {fileID: 4095960493756819310, guid: 9e6cf5d6db7956f4ba2b8246f63e8c58, type: 3}
+  _exitLightPrefab: {fileID: 7989204074373085219, guid: 6fb481434144c7d4b8e8cb2bd368bc66, type: 3}
   _base: 19
 --- !u!4 &2135934617
 Transform:

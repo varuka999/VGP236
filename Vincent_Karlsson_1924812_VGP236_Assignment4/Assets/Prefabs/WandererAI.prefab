@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 2646251994873239945}
   - component: {fileID: 5012284504812080666}
   - component: {fileID: 95494618698860715}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: WandererAI
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -31,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 1, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7379548518251898033}
@@ -52,7 +52,6 @@ MonoBehaviour:
   _agent: {fileID: 7179661810791252184}
   _target: {fileID: 0}
   _moveSpeed: 3
-  _rotationSpeed: 5
 --- !u!195 &7179661810791252184
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -108,7 +107,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: aaa1056ad85aea84faaeff9cee5ea7ad, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -144,7 +143,7 @@ CapsuleCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -166,7 +165,7 @@ GameObject:
   - component: {fileID: 5642476983223596085}
   - component: {fileID: 7204196917570821519}
   - component: {fileID: 7881875896837103707}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: LookDirectionReference
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -182,8 +181,8 @@ Transform:
   m_GameObject: {fileID: 3819977201168655778}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.46, z: 0.53}
-  m_LocalScale: {x: 0.53881, y: 0.39481, z: 0.92}
+  m_LocalPosition: {x: 0, y: 0.46, z: 0.212}
+  m_LocalScale: {x: 0.53881, y: 0.39481, z: 0.68876725}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3863516854116066657}
@@ -221,7 +220,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: b099b95e9ea51ec4db6b5726484dcacc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
