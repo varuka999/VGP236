@@ -8,12 +8,13 @@ public class AIController : MonoBehaviour
     [SerializeField] protected Transform _target;
 
     [SerializeField] protected float _moveSpeed = 0.0f;
-    [SerializeField] protected float _rotationSpeed = 0.0f;
+    //[SerializeField] protected float _rotationSpeed = 0.0f;
     //[SerializeField] protected float _resetTimer = 0.0f;
 
     public virtual void Initialize(Transform target)
     {
         _target = target;
+        _agent.speed = _moveSpeed;
     }
 
     protected virtual void Update()

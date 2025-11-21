@@ -200,6 +200,9 @@ public class DungeonManager : MonoBehaviour
         // UpdateCurrentRoom (tells player where to spawn?)
         _exitRoom = _dungeon[exitRoomIndex];
         _exitRoom.SetAsExitRoom();
+
+        Debug.Log(startingRoomIndex);
+        Debug.Log(exitRoomIndex);
     }
 
     // Adjustment refers to how many clockwise direction changes (1 would be North -> East, whereas 2 would be North -> South)

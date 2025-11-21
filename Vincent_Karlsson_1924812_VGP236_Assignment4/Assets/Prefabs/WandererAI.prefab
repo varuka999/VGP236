@@ -9,13 +9,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3863516854116066657}
-  - component: {fileID: 7609491074375230063}
+  - component: {fileID: 7284963304569804237}
   - component: {fileID: 7179661810791252184}
   - component: {fileID: 2646251994873239945}
   - component: {fileID: 5012284504812080666}
   - component: {fileID: 95494618698860715}
   m_Layer: 0
-  m_Name: ChaseAI
+  m_Name: WandererAI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37,7 +37,7 @@ Transform:
   - {fileID: 7379548518251898033}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7609491074375230063
+--- !u!114 &7284963304569804237
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -46,13 +46,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 3383830307501921930}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee91522972248794aaecd6021cc38319, type: 3}
+  m_Script: {fileID: 11500000, guid: e5ede4ede98f1a24a9a8dd752bd70253, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AIChase
+  m_EditorClassIdentifier: Assembly-CSharp::AIWanderer
   _agent: {fileID: 7179661810791252184}
   _target: {fileID: 0}
-  _moveSpeed: 2
-  _rotationSpeed: 10
+  _moveSpeed: 3
+  _rotationSpeed: 5
 --- !u!195 &7179661810791252184
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -63,7 +63,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 2
+  m_Speed: 3
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 270
@@ -182,8 +182,8 @@ Transform:
   m_GameObject: {fileID: 3819977201168655778}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.46, z: 0.36}
-  m_LocalScale: {x: 0.53881, y: 0.39481, z: 0.51872}
+  m_LocalPosition: {x: 0, y: 0.46, z: 0.53}
+  m_LocalScale: {x: 0.53881, y: 0.39481, z: 0.92}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3863516854116066657}

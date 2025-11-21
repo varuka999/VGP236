@@ -25,24 +25,22 @@ public class SequenceLoader : MonoBehaviour
 
             GameObject player = Instantiate(_playerPrefab);
             player.GetComponent<PlayerController>().Initialize();
+
+            if (_enemySpawner != null)
+            {
+
+                _enemySpawner.Initialize(_dungeonManagerPrefab, player);
+            }
+            else
+            {
+                Debug.LogError("Missing: Enemy Spawner");
+                return;
+            }
         }
         else
         {
             Debug.LogError("Missing: Player Prefab");
             return;
         }
-
-        if (_playerPrefab != null)
-        {
-
-            _enemySpawner.Initialize(_dungeonManagerPrefab);
-        }
-        else
-        {
-            Debug.LogError("Missing: Enemy Spawner");
-            return;
-        }
-
-
     }
 }
