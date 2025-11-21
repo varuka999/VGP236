@@ -2,16 +2,15 @@ using UnityEngine;
 
 public class SequenceLoader : MonoBehaviour
 {
-    //[SerializeField] private DungeonManager _dungeonManagerScript = null;
-    [SerializeField] private EnemySpawner _enemySpawner;
     [SerializeField] private GameObject _dungeonManagerPrefab = null;
-    [SerializeField] private GameObject _playerPrefab;
-    // Enemies to spawn/EnemySpawner
+    [SerializeField] private GameObject _enemySpawnerPrefab = null;
+    [SerializeField] private GameObject _playerPrefab = null;
 
     private void Awake()
     {
         if (_dungeonManagerPrefab != null)
         {
+            _dungeonManagerPrefab = Instantiate(_dungeonManagerPrefab);
             _dungeonManagerPrefab.GetComponent<DungeonManager>().Initialize();
         }
         else
@@ -29,10 +28,10 @@ public class SequenceLoader : MonoBehaviour
             GameObject player = Instantiate(_playerPrefab, new Vector3(spawnC * 5, 1.5f, spawnR * 5), Quaternion.Euler(0, 0, 0));
             player.GetComponent<PlayerController>().Initialize();
 
-            if (_enemySpawner != null)
+            if (_enemySpawnerPrefab != null)
             {
 
-                _enemySpawner.Initialize(_dungeonManagerPrefab, player);
+                _enemySpawnerPrefab.GetComponent<EnemySpawner>().Initialize(_dungeonManagerPrefab, player);
             }
             else
             {

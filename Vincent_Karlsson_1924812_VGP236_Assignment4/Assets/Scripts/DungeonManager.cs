@@ -14,17 +14,15 @@ public class DungeonManager : MonoBehaviour
     [SerializeField] private GameObject _dungeonRoomPrefab = null;
     [SerializeField] private GameObject _dungeonWallPrefab = null;
     [SerializeField] private GameObject _dungeonFloor = null;
+    [SerializeField] private GameObject _dungeonCeiling = null;
     [SerializeField] private Transform _dungeonParent = null;
     [SerializeField] private GameObject _startingLightPrefab = null;
     [SerializeField] private GameObject _exitLightPrefab = null;
 
     [SerializeField] private int _base = 20;
-    //[SerializeField] private int _widthBase = 5;
-    //[SerializeField] private int _heightBase = 5;
     private int _width = 0;
 
     public List<int> RoomIndexList { get => _roomIndexList; }
-    //public int ExitRoomID { get => _exitRoom != null ? _exitRoom.Index : _roomIndexList.Count() - 1; } // ? not sure why im doing it like this
     public DungeonRoomData StartRoom { get => _startRoom; }
     public DungeonRoomData ExitRoom { get => _exitRoom; }
     public int Width { get => _width; }
@@ -200,7 +198,7 @@ public class DungeonManager : MonoBehaviour
 
         Instantiate(_startingLightPrefab, new Vector3(_startRoom.CoordinateC * 5, 1.5f, _startRoom.CoordinateR * 5), Quaternion.Euler(0, 0, 0), _dungeonParent);
         Instantiate(_exitLightPrefab, new Vector3(_exitRoom.CoordinateC * 5, 1.5f, _exitRoom.CoordinateR * 5), Quaternion.Euler(0, 0, 0), _dungeonParent);
-        
+
         Debug.Log(startingRoomIndex);
         Debug.Log(exitRoomIndex);
     }
@@ -321,6 +319,14 @@ public class DungeonManager : MonoBehaviour
     {
         List<GameObject> gameObjects = new List<GameObject>();
 
+        GameObject dungeonFLoor = Instantiate(_dungeonFloor, _dungeonParent);
+
+        // To see the generated map in the scene view
+        if (!Application.isEditor)
+        {
+            Instantiate(_dungeonCeiling, _dungeonParent);
+        }
+
         for (int i = 0, c = 0, r = 0; i < _dungeon.Count(); ++i, ++c)
         {
             if (c >= _width)
@@ -339,7 +345,6 @@ public class DungeonManager : MonoBehaviour
             }
         }
 
-        _dungeonFloor.GetComponent<NavMeshSurface>().BuildNavMesh(); // Updates the dungeon floor navmesh
+        dungeonFLoor.GetComponent<NavMeshSurface>().BuildNavMesh(); // Updates the dungeon floor navmesh
     }
 }
-
