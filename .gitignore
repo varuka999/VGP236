@@ -110,5 +110,7 @@ InitTestScene*.unity*
 /3DNavMesh/Library/
 /Vincent_Karlsson_1924812_VGP236_Assignment4/Temp/
 /Vincent_Karlsson_1924812_VGP236_Assignment4/Library/
+/MyMultiplayer/Temp/
+/MyMultiplayer/Library/
 
 !*/Build/
