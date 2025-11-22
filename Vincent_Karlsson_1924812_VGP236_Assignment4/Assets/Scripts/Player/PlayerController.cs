@@ -11,7 +11,8 @@ public class PlayerController : MonoBehaviour
     private PlayerInput _playerInput = null;
     private InputAction _moveAction = null;
     private InputAction _lookAction = null;
-    private InputAction _menuAction = null;
+    private InputAction _restartAction = null;
+    private InputAction _quitAction = null;
 
     [SerializeField] private float _moveSpeed = 0.0f;
     [SerializeField] private float _lookSensitivity = 0.0f;
@@ -34,7 +35,8 @@ public class PlayerController : MonoBehaviour
         _playerInput = new PlayerInput();
         _moveAction = _playerInput.Player.Move;
         _lookAction = _playerInput.Player.Look;
-        _menuAction = _playerInput.Player.Menu;
+        _restartAction = _playerInput.Player.Restart;
+        _quitAction = _playerInput.Player.Quit;
 
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -46,7 +48,8 @@ public class PlayerController : MonoBehaviour
         _playerInput.Enable();
         _moveAction.Enable();
         _lookAction.Enable();
-        _menuAction.Enable();
+        _restartAction.Enable();
+        _quitAction.Enable();
     }
 
     private void OnDisable()
@@ -54,7 +57,8 @@ public class PlayerController : MonoBehaviour
         _playerInput.Disable();
         _moveAction.Disable();
         _lookAction.Disable();
-        _menuAction.Disable();
+        _restartAction.Disable();
+        _quitAction.Disable();
 
         Cursor.lockState = CursorLockMode.None;
     }
@@ -64,7 +68,11 @@ public class PlayerController : MonoBehaviour
         Move();
         Look();
 
-        if (_menuAction.IsPressed() && !Application.isEditor)
+        if (_restartAction.IsPressed() && !Application.isEditor)
+        {
+            SceneManager.LoadScene(0);
+        }
+        if (_quitAction.IsPressed() && !Application.isEditor)
         {
             Application.Quit();
         }
