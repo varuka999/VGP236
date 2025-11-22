@@ -6,11 +6,6 @@ using UnityEngine;
 
 public class DungeonManager : MonoBehaviour
 {
-    private List<DungeonRoomData> _dungeon = new List<DungeonRoomData>();
-    List<int> _roomIndexList = new List<int>(); // Keeps tarck of the index of each room that has been created
-    private DungeonRoomData _startRoom = null;
-    private DungeonRoomData _exitRoom = null;
-
     [SerializeField] private GameObject _dungeonRoomPrefab = null;
     [SerializeField] private GameObject _dungeonWallPrefab = null;
     [SerializeField] private GameObject _dungeonFloor = null;
@@ -19,7 +14,12 @@ public class DungeonManager : MonoBehaviour
     [SerializeField] private GameObject _startingLightPrefab = null;
     [SerializeField] private GameObject _exitLightPrefab = null;
 
-    [SerializeField] private int _base = 20;
+    private List<DungeonRoomData> _dungeon = new List<DungeonRoomData>();
+    List<int> _roomIndexList = new List<int>(); // Keeps tarck of the index of each room that has been created
+    private DungeonRoomData _startRoom = null;
+    private DungeonRoomData _exitRoom = null;
+
+    [SerializeField] private int _base = 19;
     private int _width = 0;
 
     public List<int> RoomIndexList { get => _roomIndexList; }
@@ -42,16 +42,9 @@ public class DungeonManager : MonoBehaviour
         int centerX = width / 2;
         int centerY = height / 2;
         int centerIndex = centerY * width + centerX;
-        //int numberOfRoomsToGenerate = (dimension / 2) + UnityEngine.Random.Range(0, dimension / 3);
-        //int numberOfRoomsToGenerate = (int)(dimension / 2.2) + UnityEngine.Random.Range(dimension / 4, dimension / 3); // 70-78% filled, Ex, Dimension = 100, num = 50 + (25~33)
-        int numberOfRoomsToGenerate = (int)UnityEngine.Random.Range(dimension * 0.43f, dimension * 0.58f); // 75~87%
+        int numberOfRoomsToGenerate = (int)UnityEngine.Random.Range(dimension * 0.43f, dimension * 0.58f); // 43-57% of map to be occupied by rooms
         _width = _base;
-
-        Debug.Log(dimension);
-        Debug.Log(numberOfRoomsToGenerate);
-
-        _dungeon = Enumerable.Repeat<DungeonRoomData>(null, dimension).ToList(); // Resizes the List to be X number of null, where X is equal to dimension
-
+        _dungeon = Enumerable.Repeat<DungeonRoomData>(null, dimension).ToList(); // 'Resizes' the List to be X number of null, where X is equal to dimension
 
         int currentRoomIndex = centerIndex;
         int maxBranchLength = width + UnityEngine.Random.Range(0, height / 2);
@@ -62,7 +55,7 @@ public class DungeonManager : MonoBehaviour
         for (int i = 0; i < numberOfRoomsToGenerate; ++i)
         {
             // If the generation process has been forced to reset too many times before the desired room amount, end the process early
-            if (resetToCenterCounter >= 50) // Not currently being used
+            if (resetToCenterCounter >= 50) // >>>NOTE: Not currently being used as current generation logic forced resets too happen too early<<<
             {
                 break;
             }
@@ -78,7 +71,6 @@ public class DungeonManager : MonoBehaviour
                 int nextRoomIndex = 0;
                 int direction = UnityEngine.Random.Range(0, 4); // 0-3, North = 0, East = 1, South = 2, West = 3
                 int oppositeDirection = (direction + 2) % 4; // Remainder always returns opposide direction (ex, 3 + 2 = 5, 5 % 4 = 1, remainder 1; Direction = 3 = West, Opposite = 1 = East)
-                //int safteCounter = 0;
 
                 // Creates a new room based on the direction if there is empty space or is not out of boundss
                 // If a new room can't be created, move the current room to the existing room
@@ -114,10 +106,9 @@ public class DungeonManager : MonoBehaviour
                         nextRoomIndex = currentRoomIndex - 1;
                     }
 
-                    // Creates a new room if the index space if empty
+                    // Creates a new room if the index space is empty
                     if (_dungeon[nextRoomIndex] == null)
                     {
-
                         _dungeon[nextRoomIndex] = new DungeonRoomData(_dungeon[currentRoomIndex], oppositeDirection, nextRoomIndex, width);
                         _dungeon[currentRoomIndex].SetConnection(_dungeon[nextRoomIndex], direction); // Need to also set the connection from the previous room to the new room (connections are 2 way)
                         _roomIndexList.Add(nextRoomIndex);
@@ -172,11 +163,7 @@ public class DungeonManager : MonoBehaviour
                     break;
                 }
             }
-
-            //DebugPrintDungeon();
         }
-
-        Debug.Log(_roomIndexList.Count());
 
         int startingRoomIndex = _roomIndexList[UnityEngine.Random.Range(0, _roomIndexList.Count)];
         int exitRoomIndex = _roomIndexList[UnityEngine.Random.Range(0, _roomIndexList.Count)];
@@ -198,9 +185,6 @@ public class DungeonManager : MonoBehaviour
 
         Instantiate(_startingLightPrefab, new Vector3(_startRoom.CoordinateC * 5, 1.5f, _startRoom.CoordinateR * 5), Quaternion.Euler(0, 0, 0), _dungeonParent);
         Instantiate(_exitLightPrefab, new Vector3(_exitRoom.CoordinateC * 5, 1.5f, _exitRoom.CoordinateR * 5), Quaternion.Euler(0, 0, 0), _dungeonParent);
-
-        Debug.Log(startingRoomIndex);
-        Debug.Log(exitRoomIndex);
     }
 
     // Adjustment refers to how many clockwise direction changes (1 would be North -> East, whereas 2 would be North -> South)

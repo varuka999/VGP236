@@ -10,10 +10,11 @@ public class EnemySpawner : MonoBehaviour
     public void Initialize(GameObject dungeonManager, GameObject player)
     {
         /// Chasing AI
-        int chaseC = dungeonManager.GetComponent<DungeonManager>().ExitRoom.CoordinateC;
-        int chaseR = dungeonManager.GetComponent<DungeonManager>().ExitRoom.CoordinateR;
-        GameObject chasingAI = Instantiate(_chasingAIPrefab, new Vector3(chaseC * 5, 1.5f, chaseR * 5), Quaternion.Euler(0, 0, 0));
-        chasingAI.GetComponent<AIChaser>().Initialize(player.transform);
+        DungeonRoomData exitRoom = dungeonManager.GetComponent<DungeonManager>().ExitRoom;
+        int index = exitRoom.Index;
+
+        GameObject chasingAI = Instantiate(_chasingAIPrefab, new Vector3(exitRoom.CoordinateC * 5, 1.5f, exitRoom.CoordinateR * 5), Quaternion.Euler(0, 0, 0));
+        chasingAI.GetComponent<AIChaser>().Initialize(player.transform, index);
 
         // Territory AI/s
         int previousIndex = 0;
@@ -21,13 +22,15 @@ public class EnemySpawner : MonoBehaviour
         {
             int territorySpawn = dungeonManager.GetComponent<DungeonManager>().GetRandomSpawnIndex();
 
-            if (territorySpawn != previousIndex)
+            if (territorySpawn != previousIndex) // Technically won't work properly if more than 2 territory enemies are spawned
             {
-                int c = territorySpawn % 19;
+                int c = territorySpawn % 19; // bad magic number :(, relies on the map dimensions not changing
                 int r = territorySpawn / 19;
 
                 GameObject territoryAI = Instantiate(_territoryAIPrefab, new Vector3(c * 5, 1.5f, r * 5), Quaternion.Euler(0, 0, 0));
                 territoryAI.GetComponent<AITerritory>().Initialize(player.transform, territorySpawn);
+
+                previousIndex = territorySpawn;
             }
             else
             {
@@ -36,9 +39,9 @@ public class EnemySpawner : MonoBehaviour
         }
 
         // Wandering AI
-        int wandereSpawn = dungeonManager.GetComponent<DungeonManager>().GetRandomSpawnIndex();
-        int wandererC = wandereSpawn % 19;
-        int wandererR = wandereSpawn / 19;
+        int wandererSpawn = dungeonManager.GetComponent<DungeonManager>().GetRandomSpawnIndex();
+        int wandererC = wandererSpawn % 19;
+        int wandererR = wandererSpawn / 19;
         GameObject wanderingAI = Instantiate(_wanderingAIPrefab, new Vector3(wandererC * 5.1f, 1.5f, wandererR * 5.1f), Quaternion.Euler(0, 0, 0));
         wanderingAI.GetComponent<AIWanderer>().Initialize(dungeonManager.GetComponent<DungeonManager>().RoomIndexList);
     }

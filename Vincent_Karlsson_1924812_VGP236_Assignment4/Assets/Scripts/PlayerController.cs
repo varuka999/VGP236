@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
@@ -10,6 +11,7 @@ public class PlayerController : MonoBehaviour
     private PlayerInput _playerInput = null;
     private InputAction _moveAction = null;
     private InputAction _lookAction = null;
+    private InputAction _menuAction = null;
 
     [SerializeField] private float _moveSpeed = 0.0f;
     [SerializeField] private float _lookSensitivity = 0.0f;
@@ -32,6 +34,7 @@ public class PlayerController : MonoBehaviour
         _playerInput = new PlayerInput();
         _moveAction = _playerInput.Player.Move;
         _lookAction = _playerInput.Player.Look;
+        _menuAction = _playerInput.Player.Menu;
 
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -43,6 +46,7 @@ public class PlayerController : MonoBehaviour
         _playerInput.Enable();
         _moveAction.Enable();
         _lookAction.Enable();
+        _menuAction.Enable();
     }
 
     private void OnDisable()
@@ -50,14 +54,20 @@ public class PlayerController : MonoBehaviour
         _playerInput.Disable();
         _moveAction.Disable();
         _lookAction.Disable();
+        _menuAction.Disable();
 
         Cursor.lockState = CursorLockMode.None;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         Move();
         Look();
+
+        if (_menuAction.IsPressed() && !Application.isEditor)
+        {
+            Application.Quit();
+        }
     }
 
     private void Move()
@@ -82,6 +92,8 @@ public class PlayerController : MonoBehaviour
         _rigidBody.angularVelocity = Vector3.zero;
     }
 
+    //>>>NOTE: There's something wrong with my look, it seems inconsistently jittery or it completely loses control at times.
+    //         Idk if it's the in the code or how I've set up the look target/cinemachine<<<
     private void Look()
     {
         Vector2 lookInput = _lookAction.ReadValue<Vector2>();

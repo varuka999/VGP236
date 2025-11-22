@@ -9,14 +9,16 @@ public class AIWanderer : AIController
 
     public void Initialize(List<int> list)
     {
+        _state = State.Wander;
+        _agent.speed = _moveSpeed;
+
         _validTargets.Clear();
         _validTargets.AddRange(list);
-        _agent.speed = _moveSpeed;
 
         FindNewDestination();
     }
 
-    protected override void Update()
+    protected override void DoWander()
     {
         _findNewTargetTimer -= Time.deltaTime;
 
@@ -34,7 +36,7 @@ public class AIWanderer : AIController
     private void FindNewDestination()
     {
         int targetIndex = _validTargets[UnityEngine.Random.Range(0, _validTargets.Count)];
-        int c = targetIndex % 19; // magic number :(
+        int c = targetIndex % 19; // bad magic number :(, relies on the map dimensions not changing
         int r = targetIndex / 19;
 
         _targetVector3 = new Vector3(c * 5, this.transform.position.y, r * 5);

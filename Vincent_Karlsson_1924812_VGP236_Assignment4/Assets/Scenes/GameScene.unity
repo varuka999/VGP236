@@ -397,7 +397,7 @@ GameObject:
   - component: {fileID: 908097892}
   - component: {fileID: 908097891}
   m_Layer: 0
-  m_Name: Directional Light
+  m_Name: Directional Light (See Map Clearer in Scene View)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

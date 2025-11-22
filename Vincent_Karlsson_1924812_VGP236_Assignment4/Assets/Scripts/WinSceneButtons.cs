@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class NewGame : MonoBehaviour
+public class WinSceneButtons : MonoBehaviour
 {
     public void StartNewGame()
     {

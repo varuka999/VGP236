@@ -7,10 +7,11 @@ public class DungeonRoomData
     private int _index = 0;
     private int _coordinateC = 0;
     private int _coordinateR = 0;
-    private bool _isExit = false;
-
+    private bool _isExit = false; // Unded up mainly being used in inspector debug mode rather than any other purpose
     public bool _isRoom = false;
 
+    // >>>NOTE: Due to change in vision connections aren't currently being used for anything, but will remain in the code for future reference<<<
+    // Also in hindset it could have easily been an array of classes (DungeonRoomData[] _dungeonConnections = new DungeonRoomData[4]) or something like that
     private DungeonRoomData _northConnection = null;
     private DungeonRoomData _eastConnection = null;
     private DungeonRoomData _southConnection = null;
@@ -45,7 +46,6 @@ public class DungeonRoomData
         _isRoom = true;
     }
 
-    // Redo connections to use array of DungeonRoomData
     public void SetConnection(DungeonRoomData connectingRoom, int direction)
     {
         switch (direction)
