@@ -6,6 +6,6 @@ public class FlashlightDimming : MonoBehaviour
 
     private void Update()
     {
-        _flashlight.intensity -= 0.001f;
+        _flashlight.intensity -= 0.005f;
     }
 }
